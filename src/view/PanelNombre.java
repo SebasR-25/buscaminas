@@ -1,28 +1,31 @@
 package view;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 
 public class PanelNombre extends JPanel {
     private JLabel nombreLabel;
     private JTextField nombreField;
     private JComboBox<String> dificultades;
     private JButton continuarButton;
-    private final String[] dificultadesVector = {"Facil","Medio","Difícil"};
+    private final String[] dificultadesVector = {"Facil","Medio","Dificil"};
 
-    public PanelNombre(){
+    public PanelNombre(ActionListener actionListener){
         setLayout(null);
-        initComp();
+        initComp(actionListener);
         ubicateComp();
         addComp();
         setVisible(true);
     }
 
-    private void initComp(){
+    private void initComp(ActionListener actionListener){
         nombreLabel = new JLabel("Ingrese su nombre");
         nombreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nombreField = new JTextField();
         dificultades = new JComboBox<>(dificultadesVector);
         continuarButton = new JButton("Continuar");
+        continuarButton.addActionListener(actionListener);
+        continuarButton.setActionCommand("CONTINUAR");
     }
     private void ubicateComp(){
         nombreLabel.setBounds(190, 140, 120, 20);
@@ -35,5 +38,21 @@ public class PanelNombre extends JPanel {
         add(nombreField);
         add(dificultades);
         add(continuarButton);
+    }
+
+    public JTextField getNombreField() {
+        return nombreField;
+    }
+
+    public void setNombreField(JTextField nombreField) {
+        this.nombreField = nombreField;
+    }
+
+    public JComboBox<String> getDificultades() {
+        return dificultades;
+    }
+
+    public void setDificultades(JComboBox<String> dificultades) {
+        this.dificultades = dificultades;
     }
 }

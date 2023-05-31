@@ -7,10 +7,10 @@ import java.io.IOException;
 public class Reader {
     public String readFile(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                contentBuilder.append(line);
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                contentBuilder.append(sCurrentLine).append("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
