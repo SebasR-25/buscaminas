@@ -1,11 +1,13 @@
 package model;
 
+import java.util.Arrays;
+
 public class BuscaMinas{
     private Celda[][] tablero;
     private int[][] visitadas;
     private int celdas;
-    private static final int[] ROW_OFFSETS = {-1, 1, 0, 0};
-    private static final int[] COL_OFFSETS = {0, 0, -1, 1};
+    private static final int[] ROW_OFFSETS = {-1, 1, 0, 0, -1, -1, 1, 1};
+    private static final int[] COL_OFFSETS = {0, 0, -1, 1, -1, 1, -1, 1};
 
     public BuscaMinas(int celdas){
         tablero = new Celda[celdas][celdas];
@@ -14,6 +16,7 @@ public class BuscaMinas{
         llenarTablero();
         fillVisitadas();
         ubicarMinas();
+        System.out.println(myToString());
         setAdyacentes(tablero, visitadas);
     }
 
@@ -47,7 +50,7 @@ public class BuscaMinas{
             for (int j = 0; j < tablero.length; j++) {
                 if (matrix[i][j].getLetra().equals("v") && visited[i][j] == 0) {
                     int count = contarAdyacentes(matrix, visited, i, j);
-                    System.out.println("Cantidad de 'm' adyacentes a ('v', " + i + ", " + j + "): " + count);
+                    matrix[i][j].setMinasAdyacentes(count);
                 }
             }
         }
@@ -55,13 +58,11 @@ public class BuscaMinas{
     private int contarAdyacentes(Celda[][] matrix, int[][] visited, int row, int col) {
         visited[row][col] = 1;
         int count = 0;
-        for (int k = 0; k < 4; k++) {
+        for (int k = 0; k < 8; k++) {
             int newRow = row + ROW_OFFSETS[k];
             int newCol = col + COL_OFFSETS[k];
-            if (esValida(matrix, visited, newRow, newCol) && matrix[newRow][newCol].getEsMina() == false) {
+            if (esValida(matrix, visited, newRow, newCol) && matrix[newRow][newCol].getEsMina()==true) {
                 count++;
-                System.out.println(count);
-                count += contarAdyacentes(matrix, visited, newRow, newCol);
             }
         }
         return count;
@@ -125,9 +126,9 @@ public class BuscaMinas{
     }
     /*
      * en el panel donde se ingresa el nombre se agrega una forma de elegir dificultad, las dificultades se deben sacar cada una de un archivo de texto que contienen el tamaño de la matriz(10, 15, 20) y la cantidad de minas(30%, 35%, 40%)
-     * 
+     *
      * hacer destapada en cadena, se destapan los caminos que tengan menos minas o que no tengan
-     * 
+     *
      * si hay 1 mina verde, si hay 2 azul y si hay mas de 2 rojo
      */
 }
