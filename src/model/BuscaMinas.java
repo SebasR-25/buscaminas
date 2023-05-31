@@ -12,8 +12,9 @@ public class BuscaMinas{
         visitadas = new int[celdas][celdas];
         this.celdas = celdas;
         llenarTablero();
+        fillVisitadas();
         ubicarMinas();
-        contarAdyacentes(celdas, celdas);
+        setAdyacentes(tablero, visitadas);
     }
 
     private void ubicarMinas(){
@@ -22,6 +23,7 @@ public class BuscaMinas{
             int y = (int)(Math.random()*10);
             if (!validarMina(x, y)) {
                 tablero[x][y].setEsMina(true);
+                tablero[x][y].setLetra("m");
             }
         }
     }
@@ -29,6 +31,7 @@ public class BuscaMinas{
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
                 tablero[i][j] = new Celda(false);
+                tablero[i][j].setLetra("v");
             }
         }
     }
@@ -39,25 +42,35 @@ public class BuscaMinas{
         }
         return result;
     }
-    private int contarAdyacentes(int row, int col) {
+    private void setAdyacentes(Celda[][] matrix, int[][] visited){
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero.length; j++) {
+                if (matrix[i][j].getLetra().equals("v") && visited[i][j] == 0) {
+                    int count = contarAdyacentes(matrix, visited, i, j);
+                    System.out.println("Cantidad de 'm' adyacentes a ('v', " + i + ", " + j + "): " + count);
+                }
+            }
+        }
+    }
+    private int contarAdyacentes(Celda[][] matrix, int[][] visited, int row, int col) {
+        visited[row][col] = 1;
         int count = 0;
-        visitadas[row-1][col-1] = 1;
         for (int k = 0; k < 4; k++) {
             int newRow = row + ROW_OFFSETS[k];
             int newCol = col + COL_OFFSETS[k];
-            if (esValida(newRow, newCol) && tablero[newRow][newCol].getEsMina() == false) {
+            if (esValida(matrix, visited, newRow, newCol) && matrix[newRow][newCol].getEsMina() == false) {
                 count++;
-                tablero[newCol][newRow].setMinasAdyacentes(count);
-                count += contarAdyacentes(newCol, newRow);
+                System.out.println(count);
+                count += contarAdyacentes(matrix, visited, newRow, newCol);
             }
         }
         return count;
     }
-    private boolean esValida(int row, int col) {
-        int rows = tablero.length;
-        int cols = tablero[0].length;
+    private  boolean esValida(Celda[][] matrix, int[][] visited, int row, int col) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
         if (row >= 0 && row < rows && col >= 0 && col < cols) {
-            if (visitadas[row][col] != 1) {
+            if (visited[row][col] == 0) {
                 return true;
             }
         }
@@ -77,6 +90,9 @@ public class BuscaMinas{
         }
         return result;
     }
+    public void myStringVisitadas(){
+
+    }
     public String myToStringNumber(){
         String result = "";
         for (int i = 0; i < tablero.length; i++) {
@@ -86,6 +102,13 @@ public class BuscaMinas{
             result += "\n";
         }
         return result;
+    }
+    private void fillVisitadas(){
+        for (int i = 0; i < visitadas.length; i++) {
+            for (int j = 0; j < visitadas.length; j++) {
+                visitadas[i][j] = 0;
+            }
+        }
     }
     public void setCeldas(int celdas){
         this.celdas = celdas;

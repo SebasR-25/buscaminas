@@ -2,6 +2,7 @@ package model;
 
 public class Celda {
     private boolean esMina;
+    private String letra;
     private int minasAdyacentes;
 
     public Celda(boolean esMina){
@@ -20,5 +21,12 @@ public class Celda {
     }
     public int getMinasAdyacentes(){
         return minasAdyacentes;
+    }
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
     }
 }
